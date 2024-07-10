@@ -1,0 +1,6 @@
+repositories:
+  - name: testrepo
+    environments:
+      - name: prod
+        reviewers:
+          - santhoshsurapuram

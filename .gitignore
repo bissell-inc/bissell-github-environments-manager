@@ -1,0 +1,9 @@
+# Ignore JavaScript files in the scripts directory
+scripts/*.js
+
+# Do not ignore JavaScript files in the dist directory
+!dist/*.js
+
+node_modules/
+*.d.ts
+*.js.map

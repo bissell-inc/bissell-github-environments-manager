@@ -1,0 +1,38 @@
+name: Manage Environments
+
+on:
+  push:
+    paths:
+      - 'config/**'
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  update-environments:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Compile TypeScript
+        run: npm run build
+        
+      - name: Authenticate GitHub CLI
+        run: echo "${{ secrets.TOKEN }}" | gh auth login --with-token
+
+      - name: Read configuration
+        id: config
+        run: |
+          echo "::set-output name=config::$(cat config/environments.yaml)"
+
+      - name: Update environments
+        run: node scripts/manage-environments.js "${{ steps.config.outputs.config }}"
